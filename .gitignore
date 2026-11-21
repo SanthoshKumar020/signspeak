@@ -4,3 +4,4 @@ signspeak.db
 data/
 .venv/
 venv/
+.vercel/

@@ -20,10 +20,14 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "mod
 from gestures import normalize  # noqa: E402
 
 BASE = os.path.dirname(os.path.abspath(__file__))
-DB = os.path.join(BASE, "signspeak.db")
+# On Vercel the project directory is read-only, so the SQLite DB lives in /tmp
+# (demo-grade persistence). Locally it sits next to app.py.
+DB = "/tmp/signspeak.db" if os.environ.get("VERCEL") else os.path.join(BASE, "signspeak.db")
 MODEL_PATH = os.path.join(BASE, "model", "signspeak_model.pkl")
 
-app = Flask(__name__)
+app = Flask(__name__,
+            template_folder=os.path.join(BASE, "templates"),
+            static_folder=os.path.join(BASE, "static"))
 app.secret_key = os.environ.get("SIGNSPEAK_SECRET", "dev-secret-change-me")
 
 with open(MODEL_PATH, "rb") as f:
@@ -181,6 +185,7 @@ def save_result():
     return jsonify(ok=True)
 
 
+init_db()
+
 if __name__ == "__main__":
-    init_db()
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)), debug=True)

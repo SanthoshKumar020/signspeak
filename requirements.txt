@@ -1,7 +1,6 @@
 flask>=3.0
 numpy>=1.26
 scikit-learn>=1.4
-pandas>=2.0
 # Optional - only needed for model/collect_data.py (real webcam data collection):
 # opencv-python>=4.9
 # mediapipe>=0.10
