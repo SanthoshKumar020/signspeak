@@ -1,1 +1,1 @@
-{"functions":{"api/index.py":{"includeFiles":"{templates,static,model}/**","maxDuration":30}},"rewrites":[{"destination":"/api/index.py","source":"/(.*)"}]}
+{"functions":{"api/index.py":{"includeFiles":"{templates,static,model}/**","maxDuration":30}}}
