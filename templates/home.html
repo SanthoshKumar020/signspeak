@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}SignSpeak — Real-Time Sign Language Gesture Recognition{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>SignSpeak</h1>
+  <p class="tagline">Real-Time Sign Language Gesture Recognition</p>
+  <p class="hero-text">
+    Show a hand sign to your webcam — SignSpeak tracks your hand, recognises the
+    gesture with a machine-learning model, and speaks it aloud as text and voice.
+    No gloves, no sensors, no special hardware.
+  </p>
+  <a class="btn btn-big" href="{{ url_for('detect') }}">Start Detecting →</a>
+</section>
+
+<section class="cards">
+  <div class="card">
+    <h3>📷 Capture</h3>
+    <p>Your webcam captures the hand gesture in real time, or you can upload an image.</p>
+  </div>
+  <div class="card">
+    <h3>✋ Track</h3>
+    <p>MediaPipe detects the hand and marks 21 landmark points on every frame.</p>
+  </div>
+  <div class="card">
+    <h3>🧠 Recognise</h3>
+    <p>A trained ML classifier identifies the sign and shows its confidence score.</p>
+  </div>
+  <div class="card">
+    <h3>🔊 Speak</h3>
+    <p>The recognised sign appears as text and is spoken aloud, so anyone can understand.</p>
+  </div>
+</section>
+
+<section class="signs">
+  <h2>Signs SignSpeak understands</h2>
+  <div class="chips">
+    {% for label in labels %}<span class="chip">{{ label }}</span>{% endfor %}
+  </div>
+  <p class="muted">Letters can be combined into words — build and speak full messages, sign by sign.</p>
+</section>
+{% endblock %}

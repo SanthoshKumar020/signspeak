@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Detect — SignSpeak{% endblock %}
+{% block content %}
+<section class="detect">
+  <h1>Detect a sign</h1>
+
+  <div class="mode-toggle">
+    <button id="mode-camera" class="btn btn-small active">📷 Camera</button>
+    <button id="mode-image" class="btn btn-small">🖼️ Image</button>
+  </div>
+
+  <div class="detect-grid">
+    <div class="stage card">
+      <video id="video" autoplay playsinline muted></video>
+      <canvas id="canvas" width="640" height="480"></canvas>
+      <img id="uploaded" alt="" hidden>
+      <div id="stage-hint" class="stage-hint">Camera is off — press “Start camera” and show a hand sign.</div>
+    </div>
+
+    <div class="panel card">
+      <div class="panel-label">Predicted sign</div>
+      <div id="prediction" class="prediction">—</div>
+      <div class="conf-bar"><div id="conf-fill"></div></div>
+      <div id="confidence" class="muted">Confidence: —</div>
+
+      <div class="panel-label">Your message</div>
+      <div id="sentence" class="sentence">…</div>
+
+      <div class="btn-row">
+        <button id="btn-camera" class="btn">Start camera</button>
+        <button id="btn-speak" class="btn" disabled>🔊 Speak message</button>
+        <button id="btn-clear" class="btn btn-ghost">Clear</button>
+        <button id="btn-save" class="btn btn-ghost" disabled>💾 Save result</button>
+      </div>
+      <label id="upload-wrap" class="btn btn-ghost" hidden>
+        Upload an image
+        <input id="file-input" type="file" accept="image/*" hidden>
+      </label>
+      <p id="status" class="muted"></p>
+    </div>
+  </div>
+
+  <div class="signs card">
+    <h3>Supported signs</h3>
+    <div class="chips">{% for label in labels %}<span class="chip">{{ label }}</span>{% endfor %}</div>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
+<script src="{{ url_for('static', filename='js/detect.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — SignSpeak{% endblock %}
+{% block content %}
+<section class="dashboard">
+  <h1>Dashboard</h1>
+  <p class="muted">{{ total }} detection{{ '' if total == 1 else 's' }} saved so far.</p>
+
+  {% if stats %}
+  <div class="cards">
+    {% for row in stats %}
+    <div class="card stat">
+      <div class="stat-num">{{ row['n'] }}</div>
+      <div class="stat-label">{{ row['label'] }}</div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <h2>Recent detections</h2>
+  {% if rows %}
+  <table class="table">
+    <thead><tr><th>Sign</th><th>Confidence</th><th>When</th></tr></thead>
+    <tbody>
+      {% for row in rows %}
+      <tr>
+        <td><strong>{{ row['label'] }}</strong></td>
+        <td>{{ '%.0f'|format(row['confidence'] * 100) }}%</td>
+        <td>{{ row['created_at'] }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="muted">Nothing saved yet — head to <a href="{{ url_for('detect') }}">Detect</a>,
+  recognise a sign and press “Save result”.</p>
+  {% endif %}
+</section>
+{% endblock %}
