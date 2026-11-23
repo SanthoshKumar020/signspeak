@@ -1,7 +1,9 @@
 __pycache__/
 *.pyc
 signspeak.db
-data/
+data/*
+!data/landmarks.csv
+!data/landmarks_manifest.csv
 .venv/
 venv/
 .vercel/

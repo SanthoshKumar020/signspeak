@@ -1,9 +1,12 @@
 """
 Train the SignSpeak gesture classifier.
 
-Default: trains on the bundled starter dataset (model/gestures.py).
-If data/landmarks.csv exists (created by collect_data.py with real webcam
-samples), it is merged in - real data is what lifts real-world accuracy.
+If data/landmarks.csv exists (real samples - produced by
+model/convert_asl_dataset.py from the ASL Now Fingerspelling dataset, or
+by model/collect_data.py from a webcam), the model trains on the REAL
+data only, and the label set is whatever classes the real data contains.
+Otherwise it falls back to the bundled synthetic starter dataset
+(model/gestures.py) so the app still runs out of the box.
 
 Run:  python model/train_model.py
 Out:  model/signspeak_model.pkl  (+ prints accuracy and a classification report)
@@ -39,11 +42,15 @@ def load_real_data():
 
 
 def main():
-    X, y = generate_dataset()
-    Xr, yr = load_real_data()
-    if Xr:
-        print(f"Merging {len(Xr)} real samples from {REAL_DATA}")
-        X, y = X + Xr, y + yr
+    X, y = load_real_data()
+    if X:
+        labels = sorted(set(y))
+        print(f"Training on {len(X)} REAL samples from {REAL_DATA}")
+        print(f"Classes ({len(labels)}): {labels}")
+    else:
+        X, y = generate_dataset()
+        labels = LABELS
+        print("No real data found - training on the synthetic starter dataset")
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.2, random_state=42, stratify=y)
     clf = RandomForestClassifier(n_estimators=300, n_jobs=-1, random_state=42)
@@ -53,7 +60,7 @@ def main():
     print(f"Samples: {len(X)}  Classes: {len(set(y))}  Test accuracy: {acc:.3f}")
     print(classification_report(y_test, pred))
     with open(OUT, "wb") as f:
-        pickle.dump({"model": clf, "labels": LABELS}, f)
+        pickle.dump({"model": clf, "labels": labels}, f)
     print("Saved", OUT)
 
 
